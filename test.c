@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 18:33:18 by sforster          #+#    #+#             */
-/*   Updated: 2023/11/30 21:47:10 by marvin           ###   ########.fr       */
+/*   Updated: 2023/11/30 21:46:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	ft_add(int x)
 {
-	int	sum = 0;
+	static int	sum = 0;
 
 	sum += x;
 	return (sum);

@@ -13,8 +13,9 @@
 #ifndef GETNEXTLINE_H
 # define GETNEXTLINE_H
 #include <stdlib.h>
+//write and read function
 #include <unistd.h>
-//
+//open function
 #include <fcntl.h>
 
 
