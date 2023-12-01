@@ -20,7 +20,7 @@ char	*get_next_line(int fd)
 	char	*line;
 
 	line = malloc(70 * sizeof(char));
-	read(fd, line, 70);
+	read(fd, line, 12);
 	if (!line )
 		return (NULL);
 	return (line);
@@ -32,5 +32,7 @@ int main(void)
 
 	fd = open("base.txt", O_RDWR);
 	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	close(fd);
 	return 0;
 }
