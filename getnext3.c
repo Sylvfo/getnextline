@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   getnextcopy.c                                      :+:      :+:    :+:   */
+/*   getnext3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sforster <sforster@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 10:01:50 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/04 10:39:33 by sforster         ###   ########.fr       */
+/*   Updated: 2023/12/04 10:38:23 by sforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	ft_read_stash(char *stash)
 
 	i = 0;
 	if (!stash)
-		return (-1);
+		return (0);
 	while (stash[i] != '\n' && stash[i] != 0)
 	{
 		i++;
@@ -109,6 +109,7 @@ char	*ft_stash_to_line(char *line, char *stash, int sizest)
 
 	tmp = malloc(sizest + 1 *(sizeof(char)));
 	i = 0;
+// fonctionne pas bien. 
 	while (i < sizest)
 	{
 		tmp[i] = stash[i];
@@ -131,19 +132,24 @@ char	*get_next_line(int fd)
 	static char	*stash = 0;
 	char		*line;
 	int			sizest;
+	int			i;
 
-	line = NULL;
-	stash = malloc(sizeof(BUFFER_SIZE + 1));
-	read(fd, stash, BUFFER_SIZE);
+	i = 0;
+	line = malloc(sizeof(BUFFER_SIZE + 1));
+	if (stash != 0)
+		
 //erreur pas de fichier, ficher non readable, buffer size < 0
 	if (!fd || BUFFER_SIZE < 0)
 		return (NULL);
-	sizest = ft_read_stash(stash);
-	ft_stash_to_line(line, stash, sizest);
+	while (sizest == BUFFER_SIZE + 1)
+	{
+		read(fd, stash, BUFFER_SIZE);
+		sizest = ft_read_stash(stash);
+		ft_stash_to_line(line, stash, sizest);
+	}
 //	si pas dre\n ajouter stash a line. 
 //	Sinon ajouter juste les lettres avant le /n et retourner la taille
-	stash = ft_clean_stash(stash, sizest);
-
+	ft_clean_stash(stash, sizest);
 	return (line);
 }
 
