@@ -6,7 +6,7 @@
 /*   By: sforster <sforster@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 10:01:50 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/04 11:55:47 by sforster         ###   ########.fr       */
+/*   Updated: 2023/12/04 18:38:58 by sforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ char	*ft_strdup(const char *s)
 	return (dest);
 }
 
+
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t	i;
@@ -109,16 +110,24 @@ int	ft_read_stash(char *stash)
 char	*ft_stash_to_line(char *line, char *stash, int sizest)
 {
 	int 	i;
-	char	*tmp;
+	int		j;
+	char	*new_line;
 
-	tmp = malloc(sizest + 1 *(sizeof(char)));
+	new_line = malloc((ft_strlen(line) + sizest + 1) *(sizeof(char)));
 	i = 0;
-	while (i < sizest)
+	j = 0;
+	while (line[i])
 	{
-		tmp[i] = stash[i];
+		new_line[i] = line[i];
 		i++;
 	}
-	return(tmp);
+	while (stash[j])
+	{
+		new_line[i] = stash[j];
+		i++;
+		j++;
+	}
+	return(new_line);
 }
 
 //add the content of our buffer to the end of our stash
@@ -139,7 +148,7 @@ int	ft_n_find(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] != '\n')
+		if (str[i] == '\n')
 			return (1);
 		i++;
 	}
@@ -152,46 +161,44 @@ char	*get_next_line(int fd)
 	char		*line;
 	int			sizest;
 
-	
-	if (stash != 0)
-		line = ft_stash_to_line(line, stash, ft_strlen(stash));
-	stash = malloc(BUFFER_SIZE + 1 * sizeof(char));
 	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) < 0)
 		return (NULL);
-	while (ft_n_find(stash) != 1)
-	{
-		read(fd, stash, BUFFER_SIZE);
-		line = ft_stash_to_line(line, stash, ft_strlen(stash));
-	}
+	stash = malloc(BUFFER_SIZE * sizeof(char));
+	read(fd, stash, BUFFER_SIZE);
+	line = ft_stash_to_line(line, stash, BUFFER_SIZE);
+//	if (!stash)
+//		stash = malloc(BUFFER_SIZE + 1 * sizeof(char));
+//	if (stash)
+//		line = ft_stash_to_line(line, stash, BUFFER_SIZE);
 	
-//	stash = malloc(sizeof(BUFFER_SIZE + 1));
-//erreur pas de fichier, ficher non readable, buffer size < 0
-//	if (!fd || BUFFER_SIZE < 0)
-//		return (NULL);
-	sizest = ft_read_stash(stash);
-//	si pas dre\n ajouter stash a line. 
-//	Sinon ajouter juste les lettres avant le /n et retourner la taille
-	stash = ft_clean_stash(stash, sizest);
+//	while (ft_n_find(stash) < 1)
+//	{
+//		read(fd, stash, BUFFER_SIZE);
+//		line = ft_stash_to_line(line, stash, BUFFER_SIZE);
+//	}
+//	read(fd, stash, BUFFER_SIZE);
+//	sizest = ft_read_stash(stash);
+//	line = ft_stash_to_line(line, stash, sizest + 1);
+//	ft_strlcat(line, stash, sizest);
+//	line = ft_stash_to_line(line, stash, sizest + 1);
+//	stash = ft_clean_stash(stash, sizest);
 	return (line);
 }
-/*
+
 int main(void)
 {
 	int		fd;
 	char	*line;
 
-	fd = open("base.txt", O_RDONLY);
-	line = get_next_line(fd);
-	printf("%s", line);
+	fd = open("test.txt", O_RDONLY);
 	line = get_next_line(fd);
 	printf("%s", line);
 	free(line);
 	close (fd);
 	return 0;
 }
-*/
 
-
+/*
 int main(void)
 {
 	int		fd;
@@ -209,7 +216,7 @@ int main(void)
 	close (fd);
 	return 0;
 }
-
+*/
 /*
 1 fonction get next line
 erreur pas de fichier, ficher non readable, buffer size < 0
