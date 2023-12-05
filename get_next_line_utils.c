@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sforster <sforster@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 18:44:00 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/01 18:52:23 by sforster         ###   ########.fr       */
+/*   Updated: 2023/12/05 09:46:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
+#include "get_next_line.h"
 
 int	ft_strlen(const char *str)
 {
@@ -23,45 +22,60 @@ int	ft_strlen(const char *str)
 	return (i);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+void	*ft_calloc(size_t count, size_t size)
 {
-	char	*dst;
-	int		i;
-	int		j;
+	unsigned char	*tmp;
+	size_t			i;
 
 	i = 0;
-	j = ft_strlen(s1);
-	dst = (char *)malloc((j + ft_strlen(s2) + 1) * sizeof(char));
+	tmp = malloc(count * size);
+	if (!tmp)
+		return (NULL);
+	while (i < count * size)
+	{
+		tmp[i] = 0;
+		i++;
+	}
+	return (tmp);
+}
+
+char	*ft_strdup(const char *s)
+{
+	int		i;
+	char	*dest;
+
+	i = 0;
+	dest = (char *)malloc(ft_strlen(s) + 1);
+	if (!dest)
+		return (NULL);
+	while (s[i])
+	{
+		dest[i] = s[i];
+		i++;
+	}
+	dest[i] = 0;
+	return (dest);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	size_t	i;
+	char	*dst;
+
+	if (!s)
+		return (NULL);
+	if (start > (unsigned int)ft_strlen(s))
+		return (ft_strdup(""));
+	if (len > (size_t)ft_strlen(s + start))
+		len = (size_t)ft_strlen(s + start);
+	dst = ft_calloc(len + 1, sizeof(char));
 	if (!dst)
 		return (NULL);
-	while (s1[i])
-	{
-		dst[i] = (char)s1[i];
-		i++;
-	}
 	i = 0;
-	while (s2[i])
+	while (i < len)
 	{
-		dst[j] = (char)s2[i];
+		dst[i] = s[(size_t)start + i];
 		i++;
-		j++;
 	}
-	dst[j] = '\0';
 	return (dst);
 }
-/*
-int main(void)
-{
-	char	*str1 = "oooh ";
-	char	*str2 = "yeaaah";
-	char	*str3;
-	char	*str4 = "babyy";
-
-	printf("%s\n", ft_strjoin(str1, str2));
-	str3 = ft_strjoin(str1, str2);
-	printf("%s\n", str3);
-	str4 = ft_strjoin(str3, str1);
-	printf("%s\n", str4);
-	return (0);
-}
-*/
