@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 17:55:21 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/05 10:50:58 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/05 21:39:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdio.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 4
+#  define BUFFER_SIZE 25
 # endif
 
 int		ft_strlen(const char *str);
