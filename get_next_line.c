@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 18:39:20 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/05 22:38:29 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/06 12:35:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,27 @@ int	ft_n_find(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '\n' || str[i] == '\0')
+		if (str[i] == '\n' || str[i] == 0)
 			return (1);
 		i++;
 	}
 	return (0);
+}
+
+int	ft_read_stash(char *stash)
+{
+	int	i;
+
+	i = 0;
+	if (!stash)
+		return (0);
+	while (stash[i])
+	{
+		if (stash[i]!= '\n' || stash[i] != 0)
+			break;
+		i++;
+	}
+	return (i);
 }
 
 char	*ft_stash_to_line(char *line, char *stash, int sizest)
@@ -51,31 +67,18 @@ char	*ft_stash_to_line(char *line, char *stash, int sizest)
 		i++;
 		j++;
 	}
-	i++;
-	new_line[i] = 0;
+//	i++;
+//	new_line[i] = 0;
 	return (new_line);
 }
 
-int	ft_read_stash(char *stash)
-{
-	int	i;
 
-	i = 0;
-	if (!stash)
-		return (-1);
-	while (stash[i] != '\n' || stash[i] != 0)
-	{
-		i++;
-	}
-	i++;
-	return (i);
-}
 
 char	*ft_clean_stash(char *stash, int lg_line)
 {
 	void	*new_stash;
 
-	new_stash = ft_substr(stash, lg_line, ft_strlen(stash) - lg_line);
+	new_stash = ft_substr(stash, lg_line, (ft_strlen(stash) - lg_line));
 	return (new_stash);
 }
 
@@ -84,22 +87,32 @@ char	*get_next_line(int fd)
 	static char		*buff;
 	char			*new_line;
 	int				sizeb;
-//	int				bytesRead;
+	int				bytesRead;
 
 	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) < 0)
 		return (NULL);
-//	new_line = malloc(BUFFER_SIZE * sizeof(char*));
-//	if (!new_line)
-//		return (NULL);
-//	new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE + 1);
+	new_line = malloc(BUFFER_SIZE * sizeof(char*));
+	if (!new_line)
+		return (NULL);
+	if (buff != 0)
+		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
 	buff = malloc(BUFFER_SIZE * sizeof(char));
 	if (!buff)
 		return (NULL);
-	read(fd, buff, BUFFER_SIZE);
-	new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE + 1);
-//	sizeb = ft_read_stash(buff);
-//	new_line = ft_stash_to_line(new_line, buff, sizeb);
-//	buff = ft_clean_stash(buff, sizeb);
+	while(ft_n_find(buff) != 1 && bytesRead > 0)
+	{
+		bytesRead = read(fd, buff, BUFFER_SIZE);
+		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
+	}
+	sizeb = ft_read_stash(buff);
+	new_line = ft_stash_to_line(new_line, buff, sizeb);
+	buff = ft_clean_stash(buff, sizeb);
+	if (bytesRead < 1)
+	{
+		free(new_line);
+		free(buff);
+		return (0);
+	}
 	return (new_line);
 }
 //	getchar();
@@ -141,8 +154,8 @@ int main(void)
 	printf("%sfin2++\n", line);
 	line = get_next_line(fd);
 	printf("%sfin3++\n", line);
-//	line = get_next_line(fd);
-//	printf("%s++", line);
+	line = get_next_line(fd);
+	printf("%s++", line);
 	free(line);
 	close (fd);
 	return 0;
