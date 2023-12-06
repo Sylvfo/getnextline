@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sforster <sforster@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 18:39:20 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/06 12:35:34 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/06 18:44:08 by sforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@ int	ft_n_find(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '\n' || str[i] == 0)
+		if (str[i] == '\n')
 			return (1);
+		if (str[i] == '\0')
+			return (2);
 		i++;
 	}
 	return (0);
@@ -36,10 +38,8 @@ int	ft_read_stash(char *stash)
 	i = 0;
 	if (!stash)
 		return (0);
-	while (stash[i])
+	while (stash[i] != '\n' && stash[i])
 	{
-		if (stash[i]!= '\n' || stash[i] != 0)
-			break;
 		i++;
 	}
 	return (i);
@@ -88,30 +88,33 @@ char	*get_next_line(int fd)
 	char			*new_line;
 	int				sizeb;
 	int				bytesRead;
+	int				found;
 
-	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) < 0)
+	found = 0;
+	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) <= 0)
 		return (NULL);
-	new_line = malloc(BUFFER_SIZE * sizeof(char*));
+	new_line = malloc(BUFFER_SIZE + 1 * sizeof(char*));
 	if (!new_line)
 		return (NULL);
-	if (buff != 0)
+	if (buff)
 		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
-	buff = malloc(BUFFER_SIZE * sizeof(char));
+	buff = malloc(BUFFER_SIZE + 1 * sizeof(char));
 	if (!buff)
 		return (NULL);
-	while(ft_n_find(buff) != 1 && bytesRead > 0)
+	while (found == 0)
 	{
-		bytesRead = read(fd, buff, BUFFER_SIZE);
 		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
+		bytesRead = read(fd, buff, BUFFER_SIZE);
+		found = ft_n_find(buff);
 	}
 	sizeb = ft_read_stash(buff);
 	new_line = ft_stash_to_line(new_line, buff, sizeb);
 	buff = ft_clean_stash(buff, sizeb);
-	if (bytesRead < 1)
+	if (found == 2)
 	{
-		free(new_line);
 		free(buff);
-		return (0);
+		free(new_line);
+		return(0);
 	}
 	return (new_line);
 }
@@ -141,13 +144,13 @@ char	*get_next_line(int fd)
 	free (new_line);
 	return (new_line);
 }*/
-
+/*
 int main(void)
 {
 	int		fd;
 	char	*line;
 	fd = open("base.txt", O_RDONLY);
- //       return 0;
+//        return 0;
 	line = get_next_line(fd);
 	printf("%sfin1++\n", line);
 	line = get_next_line(fd);
@@ -160,6 +163,7 @@ int main(void)
 	close (fd);
 	return 0;
 }
+*/
 /*
 int main(void)
 {
@@ -192,6 +196,40 @@ int main(void)
 	}
 	close (fd);
 	return 0;
+}
+
+char	*get_next_line(int fd)
+{
+	static char		*buff;
+	char			*new_line;
+	int				sizeb;
+	int				bytesRead;
+
+	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) < 0)
+		return (NULL);
+	new_line = malloc(BUFFER_SIZE * sizeof(char*));
+	if (!new_line)
+		return (NULL);
+	if (buff)
+		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
+	buff = malloc(BUFFER_SIZE * sizeof(char));
+	if (!buff)
+		return (NULL);
+	while(ft_n_find(buff) != 1 && bytesRead > 0)
+	{
+		bytesRead = read(fd, buff, BUFFER_SIZE);
+		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
+	}
+	sizeb = ft_read_stash(buff);
+	new_line = ft_stash_to_line(new_line, buff, sizeb);
+	buff = ft_clean_stash(buff, sizeb);
+	if (bytesRead <= 0)
+	{
+		free(new_line);
+		free(buff);
+		return (0);
+	}
+	return (new_line);
 }
 */
 
