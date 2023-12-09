@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 18:39:20 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/09 15:25:06 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/09 15:47:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,33 +118,7 @@ char	*get_next_line(int fd)
 	}
 	return (new_line);
 }
-//	getchar();
-//	if (buff)
-//		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
-//	
-//	getchar();
-//	if (!new_line)
-//		return (NULL);
-	
-//	
-//		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
-//	while (ft_n_find(buff) < 1)
-//	{
-//		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
-//		bytesRead = read(fd, buff, BUFFER_SIZE);
-//		if (bytesRead <= 0)
-//			break ;
-//	}
-//	if (buff == '\0')
-//		return (new_line);
-/*
-	sizeb = ft_read_stash(buff);
-	new_line = ft_stash_to_line(new_line, buff, sizeb);
-	buff = ft_clean_stash(buff, sizeb);
-	free (new_line);
-	return (new_line);
-}*/
-/*
+
 int main(void)
 {
 	int		fd;
@@ -163,73 +137,3 @@ int main(void)
 	close (fd);
 	return 0;
 }
-*/
-/*
-int main(void)
-{
-	int		fd;
-
-	fd = open("base.txt", O_RDONLY);
-//	get_next_line(fd);
-	printf("%s", get_next_line(fd));
-//	line = get_next_line(fd);
-//	printf("%s++", line);
-//	free(line);
-	close (fd);
-	return 0;
-}
-*/
-/*
-int main(void)
-{
-	int		fd;
-	char	*line;
-
-	fd = open("base.txt", O_RDONLY);
-	while (line != NULL)
-	{
-		line = get_next_line(fd);
-		if (line == NULL)
-			break;
-		printf("%s", line);
-		free(line);
-	}
-	close (fd);
-	return 0;
-}
-
-char	*get_next_line(int fd)
-{
-	static char		*buff;
-	char			*new_line;
-	int				sizeb;
-	int				bytesRead;
-
-	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) < 0)
-		return (NULL);
-	new_line = malloc(BUFFER_SIZE * sizeof(char*));
-	if (!new_line)
-		return (NULL);
-	if (buff)
-		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
-	buff = malloc(BUFFER_SIZE * sizeof(char));
-	if (!buff)
-		return (NULL);
-	while(ft_n_find(buff) != 1 && bytesRead > 0)
-	{
-		bytesRead = read(fd, buff, BUFFER_SIZE);
-		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
-	}
-	sizeb = ft_read_stash(buff);
-	new_line = ft_stash_to_line(new_line, buff, sizeb);
-	buff = ft_clean_stash(buff, sizeb);
-	if (bytesRead <= 0)
-	{
-		free(new_line);
-		free(buff);
-		return (0);
-	}
-	return (new_line);
-}
-*/
-
