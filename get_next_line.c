@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 18:39:20 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/09 15:47:13 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/09 16:29:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,11 @@ int	ft_n_find(char *str)
 {
 	int	i;
 
-	if (!str)
-		return (0);
 	i = 0;
 	while (str[i])
 	{
 		if (str[i] == '\n')
 			return (1);
-		if (str[i] == '\0')
-			return (2);
 		i++;
 	}
 	return (0);
@@ -84,38 +80,44 @@ char	*ft_clean_stash(char *stash, int lg_line)
 
 char	*get_next_line(int fd)
 {
-	static char		*buff = NULL;
+	static char		buff[BUFFER_SIZE + 1];
 	char			*new_line;
 	int				sizeb;
-//	int				bytesRead;
+	int				bytesRead;
 	int				found;
 
 	found = 0;
 	if (BUFFER_SIZE < 0 || fd < 0 || read(fd, 0, 0) < 0)
 		return (NULL);
-	new_line = malloc(BUFFER_SIZE + 1 * sizeof(char*));
+	new_line = malloc(BUFFER_SIZE * sizeof(char*));
 	if (!new_line)
 		return (NULL);
-	if (buff)
-		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
-	buff = malloc(BUFFER_SIZE + 1 * sizeof(char));
+//	if (buff)
+//		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
+//	buff = malloc(BUFFER_SIZE + 1 * sizeof(char));
 	if (!buff)
 		return (NULL);
 	while (found == 0)
 	{
-		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
-		read(fd, buff, BUFFER_SIZE);
-		found = ft_n_find(buff);
+		new_line = ft_stash_to_line(new_line, &buff, BUFFER_SIZE);
+		bytesRead = read(fd, buff, BUFFER_SIZE);
+		found = ft_n_find(&buff);
+		if (bytesRead == 0)
+		{
+			free (new_line);
+			free (buff);
+			return (NULL);
+		}
 	}
 	sizeb = ft_read_stash(buff);
-	new_line = ft_stash_to_line(new_line, buff, sizeb);
+	new_line = ft_stash_to_line(new_line, &buff, sizeb);
 	buff = ft_clean_stash(buff, sizeb);
-	if (found == 2)
+/*	if (found == 2)
 	{
 		free(buff);
 		free(new_line);
 		return(0);
-	}
+	}*/
 	return (new_line);
 }
 
@@ -123,7 +125,7 @@ int main(void)
 {
 	int		fd;
 	char	*line;
-	fd = open("base.txt", O_RDONLY);
+	fd = open("base2.txt", O_RDONLY);
 //        return 0;
 	line = get_next_line(fd);
 	printf("%sfin1++\n", line);
