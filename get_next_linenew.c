@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 18:39:20 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/09 15:25:06 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/09 12:39:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,14 @@ char	*ft_clean_stash(char *stash, int lg_line)
 
 char	*get_next_line(int fd)
 {
-	static char		*buff = NULL;
+	static char		*buff;
 	char			*new_line;
 	int				sizeb;
 //	int				bytesRead;
 	int				found;
 
 	found = 0;
-	if (BUFFER_SIZE < 0 || fd < 0 || read(fd, 0, 0) < 0)
+	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) < 0)
 		return (NULL);
 	new_line = malloc(BUFFER_SIZE + 1 * sizeof(char*));
 	if (!new_line)

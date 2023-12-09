@@ -1,5 +1,3 @@
-"bonjour monsieur'\n'
-commennallez-vous'\0'"
-dslafjaklsjf.
-
-
+Vraiment ca ne marche plus??
+Pourquoi??
+Ca va pas
