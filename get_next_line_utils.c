@@ -6,13 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 18:44:00 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/10 14:26:34 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/10 15:21:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_strlen(const char *str)
+int	ft_strlen(char *str)
 {
 	int	i;
 
@@ -22,7 +22,7 @@ int	ft_strlen(const char *str)
 	return (i);
 }
 
-void	*ft_calloc(size_t count, size_t size)
+/*void	*ft_calloc(size_t count, size_t size)
 {
 	unsigned char	*tmp;
 	size_t			i;
@@ -37,9 +37,9 @@ void	*ft_calloc(size_t count, size_t size)
 		i++;
 	}
 	return (tmp);
-}
+}*/
 
-char	*ft_strdup(const char *s)
+/*char	*ft_strdup(const char *s)
 {
 	int		i;
 	char	*dest;
@@ -55,9 +55,9 @@ char	*ft_strdup(const char *s)
 	}
 	dest[i] = 0;
 	return (dest);
-}
+}*/
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+/*char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t	i;
 	char	*dst;
@@ -78,9 +78,9 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		i++;
 	}
 	return (dst);
-}
+}*/
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(char *s, int c)
 {
 	int	i;
 
@@ -88,15 +88,15 @@ char	*ft_strchr(const char *s, int c)
 	while (s[i])
 	{
 		if (s[i] == (unsigned char) c)
-			return ((char *) s + i);
+			return (s + i);
 		i++;
 	}
 	if (s[i] == (unsigned char) c)
-		return ((char *) s + i);
+		return (s + i);
 	return (NULL);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*dst;
 	int		i;
