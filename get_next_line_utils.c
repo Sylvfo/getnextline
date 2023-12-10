@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 18:44:00 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/05 21:39:26 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/10 14:26:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,51 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		dst[i] = s[(size_t)start + i];
 		i++;
 	}
+	return (dst);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == (unsigned char) c)
+			return ((char *) s + i);
+		i++;
+	}
+	if (s[i] == (unsigned char) c)
+		return ((char *) s + i);
+	return (NULL);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*dst;
+	int		i;
+	int		j;
+
+//ici gestion probleme buffer ou pas...
+	if (!s1)
+		return (char *)(s2);
+	i = 0;
+	j = ft_strlen(s1);
+	dst = (char *)malloc((j + ft_strlen(s2) + 1) * sizeof(char));
+	if (!dst)
+		return (NULL);
+	while (s1[i])
+	{
+		dst[i] = (char)s1[i];
+		i++;
+	}
+	i = 0;
+	while (s2[i])
+	{
+		dst[j] = (char)s2[i];
+		i++;
+		j++;
+	}
+	dst[j] = '\0';
 	return (dst);
 }

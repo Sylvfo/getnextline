@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_linenew.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 18:39:20 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/09 12:39:34 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/10 15:10:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 
-int	ft_n_find(char *str)
+/*int	ft_n_find(char *str)
 {
 	int	i;
 
@@ -29,8 +29,8 @@ int	ft_n_find(char *str)
 		i++;
 	}
 	return (0);
-}
-
+}*/
+/*
 int	ft_read_stash(char *stash)
 {
 	int	i;
@@ -43,9 +43,9 @@ int	ft_read_stash(char *stash)
 		i++;
 	}
 	return (i);
-}
+}*/
 
-char	*ft_stash_to_line(char *line, char *stash, int sizest)
+/*char	*ft_stash_to_line(char *line, char *stash, int sizest)
 {
 	int		i;
 	int		j;
@@ -70,52 +70,84 @@ char	*ft_stash_to_line(char *line, char *stash, int sizest)
 //	i++;
 //	new_line[i] = 0;
 	return (new_line);
+}*/
+char	*ft_read_add_buff(fd, buff)
+{
+	int		bytesread;
+	char	*new_buff;
+	
+	new_buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if(!new_buff)
+		return (NULL);
+	bytesread = 1;
+// pas encore tres sure comment est géré ce probleme de buffer pas vide...
+	while ((ft_strchr(buff, '\n') == 0) && bytesread != 0)
+	{
+		bytesread = read("base2.txt", buff, BUFFER_SIZE);
+		buff[bytesread] = '\0';
+		new_buff = ft_strjoin(new_buff, buff);
+	}
+	free (buff);
+	return (new_buff);
 }
 
-
-
-char	*ft_clean_stash(char *stash, int lg_line)
+char	*ft_buff_to_line(char *buff)
 {
-	void	*new_stash;
+	int		i;
+	int		j;
+	char	*new_line;
 
-	new_stash = ft_substr(stash, lg_line, (ft_strlen(stash) - lg_line));
-	return (new_stash);
+	if (!buff)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (buff[i] != '\n' && buff[i] != '\0')
+		i++;
+	new_line = malloc((i + 2) * sizeof(char));
+	if (!new_line)
+		return (NULL);
+	while (buff[j] && j < i)
+	{
+		new_line[j] = buff[j];
+		j++;
+	}
+	new_line[j] = '\n';
+	return (new_line);
+}
+
+char	*ft_clean_buff(char *s)
+{
+	int	i;
+
+	if (!s)
+		return (NULL);
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == '\n')
+			return ((char *) s + i + 1);
+		i++;
+	}
+	return (s);
 }
 
 char	*get_next_line(int fd)
 {
 	static char		*buff;
 	char			*new_line;
-	int				sizeb;
 //	int				bytesRead;
-	int				found;
+//	int				found;
 
-	found = 0;
+//	found = 0;
 	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) < 0)
 		return (NULL);
-	new_line = malloc(BUFFER_SIZE + 1 * sizeof(char*));
-	if (!new_line)
-		return (NULL);
-	if (buff)
-		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
-	buff = malloc(BUFFER_SIZE + 1 * sizeof(char));
+	buff = ft_read_add_buff(fd, buff);
+// il sort d ici avec le \n moustique dans le filet à papillon. 
+// en fait tu utilises le filet pour attraper plus de papillon jusque ya un moustique. 
 	if (!buff)
 		return (NULL);
-	while (found == 0)
-	{
-		new_line = ft_stash_to_line(new_line, buff, BUFFER_SIZE);
-		read(fd, buff, BUFFER_SIZE);
-		found = ft_n_find(buff);
-	}
-	sizeb = ft_read_stash(buff);
-	new_line = ft_stash_to_line(new_line, buff, sizeb);
-	buff = ft_clean_stash(buff, sizeb);
-	if (found == 2)
-	{
-		free(buff);
-		free(new_line);
-		return(0);
-	}
+	new_line = ft_buff_to_line(buff);
+	buff = ft_clean_buff(buff);
 	return (new_line);
 }
 //	getchar();
@@ -144,7 +176,7 @@ char	*get_next_line(int fd)
 	free (new_line);
 	return (new_line);
 }*/
-/*
+
 int main(void)
 {
 	int		fd;
@@ -163,7 +195,7 @@ int main(void)
 	close (fd);
 	return 0;
 }
-*/
+
 /*
 int main(void)
 {
