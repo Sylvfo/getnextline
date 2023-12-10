@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 17:55:21 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/10 15:53:46 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/11 00:02:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdio.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 35
+#  define BUFFER_SIZE 75
 # endif
 
 
