@@ -40,13 +40,15 @@ char	*ft_buff_to_line(char *buff)
 		new_line[j] = buff[j];
 		j++;
 	}
-	new_line[j] = '\0';
+	new_line[j - 1] = '\0';
 	return (new_line);
 }
 
 int main(void)
 {
-	char *str = "seul le soir tard..-"
+	char *str = "seul le soir \n tard..-";
+	printf("%s", ft_buff_to_line(str));
+	return (0);
 }
 
 

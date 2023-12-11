@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 18:44:00 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/10 15:21:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/11 11:26:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,22 @@ char	*ft_strchr(char *s, int c)
 	if (s[i] == (unsigned char) c)
 		return (s + i);
 	return (NULL);
+}
+
+int	ft_findline(char *str)
+{
+	int	i;
+	
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+	{
+		if (str[i] == '\n')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 char	*ft_strjoin(char *s1, char *s2)

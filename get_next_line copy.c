@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 18:39:20 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/11 12:34:42 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/11 11:06:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*ft_buff_to_line(char *buff)
 {
 	int		i;
 	int		j;
-	char	*line;
+	char	*new_line;
 
 	if (!buff)
 		return (NULL);
@@ -50,24 +50,22 @@ char	*ft_buff_to_line(char *buff)
 	j = 0;
 	while (buff[i])
 	{
-//		if (buff[i] == '\n' || buff[i] == '\0')
-		if (buff[i] == '\n')
+		if (buff[i] == '\n' || buff[i] == '\0')
 			break ;
 		i++;
 	}
-	if (i == 0)
-		return (NULL);
-	line = malloc(i + 1 * sizeof(char));
-	if (!line)
+	i = i -1;
+	new_line = malloc(i + 1 * sizeof(char));
+	if (!new_line)
 		return (NULL);
 	while (i >= j)
 	{
-		line[j] = buff[j];
+		new_line[j] = buff[j];
 		j++;
 	}
 	j++;
-	line[j] = '\0';
-	return (line);
+	new_line[j] = '\0';
+	return (new_line);
 }
 
 char	*ft_clean_buff(char *buff)
@@ -79,8 +77,6 @@ char	*ft_clean_buff(char *buff)
 	
 	i = 0;
 	j = 0;
-	if (!buff)
-		return (NULL);
 	while (buff[i])
 	{
 		if (buff[i] == '\n' || buff[i] == '\0')
@@ -88,8 +84,9 @@ char	*ft_clean_buff(char *buff)
 		i++;
 	}
 	i++;
-	i++;
-	new_buff = malloc((ft_strlen(buff) - i -1) * sizeof(char));
+	if (i == 0)
+		return (NULL);
+	new_buff = malloc((ft_strlen(buff) - i + 1) * sizeof(char));
 	if (!new_buff)
 		return (NULL);
 	while (buff[i])
@@ -105,47 +102,41 @@ char	*ft_clean_buff(char *buff)
 
 char	*get_next_line(int fd)
 {
-	char			*buff;
-	static char		*line;
-	char			*gg;
+	static char		*buff;
+	char			*new_line;
 	int				bytesread;
 
-	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) <= 0 || 4095 < fd)
+	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) < 0 || 4095 < fd)
 		return (NULL);
-	if (line && ft_findline(line) == 1)
-		return (ft_buff_to_line(line));
-	buff = malloc(BUFFER_SIZE + 1 * sizeof(char));
 	if (!buff)
-		return (NULL);
-	bytesread = read(fd, buff, BUFFER_SIZE);
-	buff[bytesread] = '\0';
-	while (bytesread > 0)
 	{
-		line = ft_strjoin(line, buff);
-		if (ft_findline (line) == 1)
-			break ;
+		buff = malloc(BUFFER_SIZE + 1 * sizeof(char));
+		if (!buff)
+			return (NULL);
 		bytesread = read(fd, buff, BUFFER_SIZE);
-		buff[bytesread] = '\0';
+		if (bytesread == 0)
+		{
+			free (buff);
+			return (NULL);
+		}
+		buff[BUFFER_SIZE + 1] = '\0';
 	}
-//	return (line);
-	gg = ft_buff_to_line(line);
-//	return (gg);
-	line = ft_clean_buff(line);
-	if (line[0] == '\0')
-	{
-		free (line);
-		return (NULL);
-	}
-//		return (buff);
-/*	if (line[0] == '\0')
+	new_line = ft_read_add_buff(fd, buff);
+//	if (!new_line)
+//			return ("aa");
+//	return (new_line);
+	buff = ft_clean_buff(new_line);
+		return (buff);
+	new_line = ft_buff_to_line(new_line);
+	if (new_line[0] == '\0')
 	{
 		free (buff);
 		return (NULL);
-	}*/
-//		return (line);
-	return (gg);
+	}
+//		return (new_line);
+	return (new_line);
 }
-/*
+
 int	main(void)
 {
 	int		fd;
@@ -168,4 +159,4 @@ int	main(void)
 	free(line);
 	close (fd);
 	return (0);
-}*/
+}
