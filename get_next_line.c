@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sforster <sforster@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/04 18:39:20 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/13 18:25:52 by sforster         ###   ########.fr       */
+/*   Created: 2023/12/13 18:30:06 by sforster          #+#    #+#             */
+/*   Updated: 2023/12/13 18:43:46 by sforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "get_next_line.h"
+#include "get_next_line.h"
 
 int	ft_findline(char *str)
 {
@@ -31,7 +31,7 @@ int	ft_findline(char *str)
 static char	*ft_get_line_reminder(char **line)
 {
 	size_t		i;
-	char		*reminder;  
+	char		*reminder;
 	char		*next_line;
 
 	i = 0;
@@ -57,13 +57,10 @@ char	*get_next_line(int fd)
 	char			buff[BUFFER_SIZE + 1];
 	int				bytesread;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || 4095 < fd || read(fd, 0, 0) == - 1)
+	if (fd < 0 || BUFFER_SIZE <= 0 || 4095 < fd || read(fd, 0, 0) == -1)
 	{
-		if (reminder)
-		{
-			free (reminder);
-			reminder = NULL;
-		}
+		free (reminder);
+		reminder = NULL;
 		return (NULL);
 	}
 	if (reminder && ft_findline(reminder))
@@ -78,8 +75,9 @@ char	*get_next_line(int fd)
 		bytesread = read(fd, buff, BUFFER_SIZE);
 		buff[bytesread] = 0;
 	}
-	return ft_get_line_reminder(&reminder);
+	return (ft_get_line_reminder(&reminder));
 }
+
 /*
 int	main(void)
 {
@@ -103,4 +101,3 @@ int	main(void)
 	close (fd);
 	return (0);
 }*/
-
