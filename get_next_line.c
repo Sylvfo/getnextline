@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sforster <sforster@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 18:39:20 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/13 10:55:57 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/13 18:25:52 by sforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,17 @@ char	*get_next_line(int fd)
 {
 	static char		*reminder = NULL;
 	char			buff[BUFFER_SIZE + 1];
-	size_t			bytesread;
+	int				bytesread;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || 4095 < fd || read(fd, 0, 0) == -1 )
+	if (fd < 0 || BUFFER_SIZE <= 0 || 4095 < fd || read(fd, 0, 0) == - 1)
+	{
+		if (reminder)
+		{
+			free (reminder);
+			reminder = NULL;
+		}
 		return (NULL);
+	}
 	if (reminder && ft_findline(reminder))
 		return (ft_get_line_reminder(&reminder));
 	bytesread = read(fd, buff, BUFFER_SIZE);
@@ -96,3 +103,4 @@ int	main(void)
 	close (fd);
 	return (0);
 }*/
+

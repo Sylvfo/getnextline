@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sforster <sforster@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 18:44:00 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/13 10:43:24 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/13 18:16:31 by sforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,33 @@ char	*ft_strjoin(char *s1, char *s2)
 	dst[s1i] = '\0';
 	free (s);
 	return (dst);
+}
+
+void	*ft_bzero(void *s, int n)
+{
+	unsigned char	*p;
+	int			i;
+
+	p = (unsigned char *)s;
+	i = 0;
+	while (i < n)
+	{
+		p[i] = 0;
+		i++;
+	}
+	return (s);
+}
+void	*ft_memset(void *b, int c, int len)
+{
+	unsigned char	*p;
+	int			i;
+
+	p = (unsigned char *)b;
+	i = 0;
+	while (i < len)
+	{
+		p[i] = c;
+		i++;
+	}
+	return (b);
 }
