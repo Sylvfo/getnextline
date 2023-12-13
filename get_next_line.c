@@ -6,144 +6,73 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 18:39:20 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/11 12:34:42 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/13 00:59:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+# include "get_next_line.h"
 
-char	*ft_read_add_buff(int fd, char *buff)
+int	ft_findline(char *str)
 {
-	int		bytesread;
-	char	*new_buff;
+	int	i;
 
-	new_buff = malloc((BUFFER_SIZE) * sizeof(char));
-	if (!new_buff)
-		return (NULL);
-	bytesread = 1;
-// pas encore tres sure comment est gér ce probleme de buffer pas vide...
-//&& !ft_strchr(buff, '\0')
-	while (!ft_strchr(buff, '\n') && bytesread > 0 && !ft_strchr(buff, '\0'))
+	if (!str)
+		return (0);
+	i = 0;
+	while (str[i])
 	{
-		new_buff = ft_strjoin(new_buff, buff);
-		bytesread = read(fd, buff, BUFFER_SIZE);
-		buff[bytesread] = '\0';
+		if (str[i] == '\n')
+			return (1);
+		i++;
 	}
-	if (bytesread == 0)
-		return (NULL);
-	new_buff = ft_strjoin(new_buff, buff);
-	free (buff);
-//	if (!new_buff)
-//		return (NULL);
-	return (new_buff);
+	return (0);
 }
 
-char	*ft_buff_to_line(char *buff)
+static char	*ft_get_line_reminder(char **line)
 {
-	int		i;
-	int		j;
-	char	*line;
+	size_t		i;
+	char		*reminder;
+	char		*next_line;
 
-	if (!buff)
-		return (NULL);
 	i = 0;
-	j = 0;
-	while (buff[i])
-	{
-//		if (buff[i] == '\n' || buff[i] == '\0')
-		if (buff[i] == '\n')
-			break ;
+	if (!*line)
+		return (NULL);
+	while ((*line)[i] && (*line)[i] != '\n')
 		i++;
-	}
-	if (i == 0)
-		return (NULL);
-	line = malloc(i + 1 * sizeof(char));
-	if (!line)
-		return (NULL);
-	while (i >= j)
-	{
-		line[j] = buff[j];
-		j++;
-	}
-	j++;
-	line[j] = '\0';
-	return (line);
-}
-
-char	*ft_clean_buff(char *buff)
-{
-	int		i;
-	int		j;
-	char	*new_buff;
-
-	
-	i = 0;
-	j = 0;
-	if (!buff)
-		return (NULL);
-	while (buff[i])
-	{
-		if (buff[i] == '\n' || buff[i] == '\0')
-			break ;
+	if ((*line)[i] == '\n')
 		i++;
-	}
-	i++;
-	i++;
-	new_buff = malloc((ft_strlen(buff) - i -1) * sizeof(char));
-	if (!new_buff)
-		return (NULL);
-	while (buff[i])
-	{
-		new_buff[j] = buff[i];
-		j++;
-		i++;
-	}
-	j++;
-	new_buff[j] = '\0';
-	return (new_buff);
+	if (!(*line)[i])
+		reminder = NULL;
+	else
+		reminder = ft_strndup(*line + i, ft_strlen(*line + i));
+	next_line = ft_strndup(*line, i);
+	free (*line);
+	*line = reminder;
+	return (next_line);
 }
 
 char	*get_next_line(int fd)
 {
-	char			*buff;
-	static char		*line;
-	char			*gg;
-	int				bytesread;
+	static char		*reminder = NULL;
+	char			buff[BUFFER_SIZE + 1];
+	size_t			bytesread;
 
-	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) <= 0 || 4095 < fd)
+
+	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0 || 1024 < fd )
 		return (NULL);
-	if (line && ft_findline(line) == 1)
-		return (ft_buff_to_line(line));
-	buff = malloc(BUFFER_SIZE + 1 * sizeof(char));
-	if (!buff)
-		return (NULL);
+	if (reminder && ft_findline(reminder) == 1)
+		return (ft_get_line_reminder(&reminder));
 	bytesread = read(fd, buff, BUFFER_SIZE);
-	buff[bytesread] = '\0';
-	while (bytesread > 0)
+	buff[bytesread] = 0;
+	while (bytesread > 0 && bytesread <= BUFFER_SIZE)
 	{
-		line = ft_strjoin(line, buff);
-		if (ft_findline (line) == 1)
-			break ;
+		reminder = ft_strjoin(reminder, buff);
+		if (!reminder || ft_findline(reminder) == 1)
+			return (ft_get_line_reminder(&reminder));
 		bytesread = read(fd, buff, BUFFER_SIZE);
-		buff[bytesread] = '\0';
+		buff[bytesread] = 0;
 	}
-//	return (line);
-	gg = ft_buff_to_line(line);
-//	return (gg);
-	line = ft_clean_buff(line);
-	if (line[0] == '\0')
-	{
-		free (line);
-		return (NULL);
-	}
-//		return (buff);
-/*	if (line[0] == '\0')
-	{
-		free (buff);
-		return (NULL);
-	}*/
-//		return (line);
-	return (gg);
+	return ft_get_line_reminder(&reminder);
 }
 /*
 int	main(void)
@@ -151,10 +80,9 @@ int	main(void)
 	int		fd;
 	char	*line = NULL;
 
-	fd = open("base2.txt", O_RDONLY);
+	fd = open("base.txt", O_RDONLY);
 //        return 0;
-	line = get_next_line(fd);
-	printf("%sfin1++\n", line);
+	printf("%s fin1++\n", (get_next_line(fd)));
 	line = get_next_line(fd);
 	printf("%sfin2++\n", line);
 	line = get_next_line(fd);
