@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 18:44:00 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/13 00:52:17 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/13 10:43:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ char	*ft_strndup(char *s, size_t c)
 	char	*dest;
 	size_t		j;
 
+ //	if (!s)
+//		return (NULL);
 	if (c < ft_strlen(s))
 		j = c;
 	else
@@ -53,7 +55,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	char		*dst;
 	size_t		s1i;
 	size_t		length;
+	char		*s;
 
+
+	s = s1;
 	s1i = 0;
 	length = ft_strlen(s1);
 	if (ft_strlen(s2))
@@ -68,5 +73,6 @@ char	*ft_strjoin(char *s1, char *s2)
 		while (*s2)
 			dst[s1i++] = (*s2++);
 	dst[s1i] = '\0';
+	free (s);
 	return (dst);
 }

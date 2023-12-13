@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 18:39:20 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/13 00:59:34 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/13 10:36:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,17 @@ char	*get_next_line(int fd)
 	char			buff[BUFFER_SIZE + 1];
 	size_t			bytesread;
 
-
-	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0 || 1024 < fd )
+	if (fd < 0 || BUFFER_SIZE <= 0 || 4095 < fd || read(fd, 0, 0) == -1 )
 		return (NULL);
-	if (reminder && ft_findline(reminder) == 1)
+	if (reminder && ft_findline(reminder))
 		return (ft_get_line_reminder(&reminder));
 	bytesread = read(fd, buff, BUFFER_SIZE);
 	buff[bytesread] = 0;
-	while (bytesread > 0 && bytesread <= BUFFER_SIZE)
+	while (0 < bytesread)
 	{
 		reminder = ft_strjoin(reminder, buff);
-		if (!reminder || ft_findline(reminder) == 1)
-			return (ft_get_line_reminder(&reminder));
+		if (!reminder || ft_findline(reminder))
+			break ;
 		bytesread = read(fd, buff, BUFFER_SIZE);
 		buff[bytesread] = 0;
 	}
