@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 18:39:20 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/13 10:36:40 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/13 10:55:57 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_findline(char *str)
 static char	*ft_get_line_reminder(char **line)
 {
 	size_t		i;
-	char		*reminder;
+	char		*reminder;  
 	char		*next_line;
 
 	i = 0;
