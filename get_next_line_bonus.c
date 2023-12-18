@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sforster <sforster@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 18:30:06 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/18 08:32:07 by sforster         ###   ########.fr       */
+/*   Updated: 2023/12/18 08:49:02 by sforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	ft_findline(char *str)
 {
@@ -53,30 +53,31 @@ static char	*ft_get_line_reminder(char **line)
 
 char	*get_next_line(int fd)
 {
-	static char		*reminder = NULL;
+	static char		*reminder[1024];
 	char			buff[BUFFER_SIZE + 1];
 	int				bytesread;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || 4095 < fd || read(fd, 0, 0) == -1)
 	{
-		free (reminder);
-		reminder = NULL;
+		free (reminder[fd]);
+		reminder[fd] = NULL;
 		return (NULL);
 	}
-	if (reminder && ft_findline(reminder))
-		return (ft_get_line_reminder(&reminder));
+	if (reminder[fd] && ft_findline(reminder[fd]))
+		return (ft_get_line_reminder(&reminder[fd]));
 	bytesread = read(fd, buff, BUFFER_SIZE);
 	buff[bytesread] = 0;
 	while (0 < bytesread)
 	{
-		reminder = ft_strjoin(reminder, buff);
-		if (!reminder || ft_findline(reminder))
+		reminder[fd] = ft_strjoin(reminder[fd], buff);
+		if (!reminder[fd] || ft_findline(reminder[fd]))
 			break ;
 		bytesread = read(fd, buff, BUFFER_SIZE);
 		buff[bytesread] = 0;
 	}
-	return (ft_get_line_reminder(&reminder));
+	return (ft_get_line_reminder(&reminder[fd]));
 }
+
 /*
 int	main(void)
 {
@@ -99,5 +100,4 @@ int	main(void)
 	free(line);
 	close (fd);
 	return (0);
-}
-*/
+}*/
