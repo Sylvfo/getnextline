@@ -6,7 +6,7 @@
 /*   By: sforster <sforster@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 18:30:06 by sforster          #+#    #+#             */
-/*   Updated: 2023/12/18 08:32:07 by sforster         ###   ########.fr       */
+/*   Updated: 2023/12/18 09:48:45 by sforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*get_next_line(int fd)
 	}
 	return (ft_get_line_reminder(&reminder));
 }
-/*
+
 int	main(void)
 {
 	int		fd;
@@ -100,4 +100,4 @@ int	main(void)
 	close (fd);
 	return (0);
 }
-*/
+
